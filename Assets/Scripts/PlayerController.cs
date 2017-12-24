@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour {
     void Start () {
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
-        rb2D.freezeRotation = true;
+        //rb2D.freezeRotation = true;
     }
 
     void FixedUpdate () {
