@@ -5,9 +5,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     public float speed;
+    public LayerMask blockingLayer;
+
     private Rigidbody2D rb2D;
     private BoxCollider2D boxCollider;
-    public LayerMask blockingLayer;
     // Use this for initialization
     void Start () {
         boxCollider = GetComponent<BoxCollider2D>();
@@ -35,5 +36,19 @@ public class PlayerController : MonoBehaviour {
             return true;
         }
         return false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.tag == "Finish")
+        {
+            //Invoke("Restart", restardLevelDelay);
+            StartCoroutine(EndingAnimation(other.transform.position));
+        }
+    }
+
+    protected IEnumerator EndingAnimation(Vector3 end) {
+        float step = ( speed / 2 ) * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, end, step);
+        yield return null;
     }
 }
