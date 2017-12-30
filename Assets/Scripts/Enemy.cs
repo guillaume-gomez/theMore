@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour {
 
     public float speed = 0.8f;
     public LayerMask blockingLayer;
+    public Transform playerTransform;
 
     private Vector3 target;
     private float tarX = 0.0f;
@@ -14,7 +15,6 @@ public class Enemy : MonoBehaviour {
 
     void Start() {
         CreateTarPoint();
-        //transform.freezeRotation = true;
     }
 
     void CreateTarPoint() {
@@ -44,7 +44,7 @@ public class Enemy : MonoBehaviour {
             transform.position = Vector3.MoveTowards(transform.position, target, step);
         } else {
             target = new Vector3(-tarX + transform.position.x, -tarY + transform.position.y, 0.0f);
-            Debug.Log(target);
+            //Debug.Log(target);
         }
 
     }
