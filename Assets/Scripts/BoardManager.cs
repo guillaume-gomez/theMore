@@ -20,10 +20,10 @@ public class BoardManager : MonoBehaviour
 
     public int columns = 20;
     public int rows = 20;
-    public int tileSize = 1;
     public Count wallCount = new Count(5, 9);
     public Count foodCount = new Count(1, 5);
     public GameObject exit;
+    public GameObject beginZone;
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
     public GameObject[] foodTiles;
@@ -32,6 +32,7 @@ public class BoardManager : MonoBehaviour
 
     private Transform boardHolder;
     private List <Vector3> gridPositions = new List <Vector3> ();
+    private Vector3 beginZonePosition = new Vector3();
 
     void Start() {
         SetupScene(1);
@@ -83,20 +84,30 @@ public class BoardManager : MonoBehaviour
 
         for(int i = 0; i < ObjectCount; ++i)
         {
-            Vector3 randomPosition  = RandomPosition();
+            Vector3 randomPosition = RandomPosition();
             GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
             Instantiate(tileChoice, randomPosition, Quaternion.identity);
         }
     }
 
+    void InstanciateAtRandom(GameObject obj) {
+        beginZonePosition = RandomPosition();
+        Debug.Log(beginZonePosition);
+        Instantiate(obj, beginZonePosition, Quaternion.identity);
+    }
+
     public void SetupScene(int level)
     {
-        BoardSetup();
         InitialiseList();
-        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
-        LayoutObjectAtRandom(foodTiles, foodCount.minimum, foodCount.maximum);
-        int enemyCount = 1;//(int)Mathf.Log(level, 2f);
+        BoardSetup();
+        int enemyCount = (int)Mathf.Log(level, 2f) * 3;
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
+        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
         Instantiate(exit, new Vector3(columns -1, rows - 1, 0f), Quaternion.identity);
+        InstanciateAtRandom(beginZone);
+    }
+
+    public Vector3 getBeginZonePosition() {
+        return beginZonePosition;
     }
 }
