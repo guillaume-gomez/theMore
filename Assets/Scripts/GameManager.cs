@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     public BoardManager boardScript;
 
+    private GameObject player;
     private int level = 1;
     private bool doingSetup;
 
@@ -43,6 +44,8 @@ public class GameManager : MonoBehaviour
 
         //Invoke("HideLevelImage", levelStartDelay);
         boardScript.SetupScene(level);
+        player = GameObject.FindGameObjectWithTag("Player");
+        player.transform.position = boardScript.getBeginZonePosition();
     }
 
     private void HideLevelImage()
