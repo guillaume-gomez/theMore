@@ -7,14 +7,21 @@ public class Enemy : MonoBehaviour {
 
     public float speed = 0.8f;
     public LayerMask blockingLayer;
-    public Transform playerTransform;
+
+    public GameObject bulletPrefab;
+    public Transform bulletSpawn;
+
+    public float detectionDistance = 3.0f;
 
     private Vector3 target;
     private float tarX = 0.0f;
     private float tarY = 0.0f;
+    private GameObject targetToShoot;
+    private bool onceShootFunctionCalled = false;
 
     void Start() {
         CreateTarPoint();
+        targetToShoot = GameObject.FindWithTag("Player");
     }
 
     void CreateTarPoint() {
@@ -47,6 +54,25 @@ public class Enemy : MonoBehaviour {
             //Debug.Log(target);
         }
 
+        if (Vector3.Distance(transform.position, targetToShoot.transform.position) <= detectionDistance) {
+            if(!onceShootFunctionCalled) {
+                Invoke("Fire", 0.3f);
+                onceShootFunctionCalled = true;
+            }
+        }
+
     }
 
+    void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.tag == "Bullet") {
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+        }
+    }
+
+    void Fire()
+    {
+        Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+        onceShootFunctionCalled = false;
+    }
 }
