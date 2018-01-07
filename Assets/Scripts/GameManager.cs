@@ -8,9 +8,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     public BoardManager boardScript;
 
-    private GameObject player;
     private int level = 1;
     private bool doingSetup;
+    private bool needUpdate;
+    private float restardLevelDelay = 1f;
 
     void Awake()
     {
@@ -28,7 +29,6 @@ public class GameManager : MonoBehaviour
 
     static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        instance.level++;
         instance.InitGame();
     }
 
@@ -41,11 +41,9 @@ public class GameManager : MonoBehaviour
     void InitGame()
     {
         doingSetup = true;
-
+        needUpdate = true;
         //Invoke("HideLevelImage", levelStartDelay);
         boardScript.SetupScene(level);
-        player = GameObject.FindGameObjectWithTag("Player");
-        player.transform.position = boardScript.getBeginZonePosition();
     }
 
     private void HideLevelImage()
@@ -55,10 +53,32 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        // DO SOME STUFF
+        Invoke("LoadingLevel", restardLevelDelay);
         enabled = false;
+    }
+
+    public void NextLevel() {
+        if(needUpdate) {
+            level++;
+            Invoke("LoadingLevel", restardLevelDelay);
+            needUpdate = false;
+        }
+    }
+
+    private void LoadingLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
     void Update()
     {
     }
+}
+
+
+public enum GameStates {
+    Intro,
+    Mainmenu,
+    LevelSelection
 }

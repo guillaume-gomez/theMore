@@ -50,14 +50,18 @@ public class PlayerController : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Finish")
         {
-            Invoke("LoadingLevel", restardLevelDelay);
+            GameManager.instance.NextLevel();
             StartCoroutine(EndingAnimation(other.transform.position));
         }
     }
 
-    private void LoadingLevel()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.tag == "BulletEnemy") {
+            Destroy(other.gameObject);
+            //Camera.main.CameraShake(2.0f, 1.0f);
+            GameManager.instance.GameOver();
+            gameObject.SetActive(false);
+        }
     }
 
     protected IEnumerator EndingAnimation(Vector3 end) {
@@ -68,9 +72,6 @@ public class PlayerController : MonoBehaviour {
 
     void Fire()
     {
-        GameObject bullet = (GameObject)Instantiate (bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-        //bullet.GetComponent<Rigidbody2D>().AddForce(bullet.transform.forward * 1000);
-        // Destroy the bullet after 2 seconds
-        //Destroy(bullet, 2.0f);
+        Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
     }
 }
