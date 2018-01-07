@@ -34,6 +34,7 @@ public class BoardManager : MonoBehaviour
     private Transform boardHolder;
     private List <Vector3> gridPositions = new List <Vector3> ();
     private Vector3 beginZonePosition = new Vector3();
+    private Vector3 exitZonePosition = new Vector3();
 
     void Start() {
         SetupScene(1);
@@ -65,7 +66,7 @@ public class BoardManager : MonoBehaviour
                 {
                     toInstanciate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
                 }
-                GameObject instance = Instantiate (toInstanciate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+                GameObject instance = Instantiate(toInstanciate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
             }
         }
