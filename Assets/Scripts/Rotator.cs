@@ -29,7 +29,6 @@ public class Rotator : MonoBehaviour {
     void Shoot() {
         Vector3 offset = new Vector3(Mathf.Sin(currentAngle), Mathf.Cos(currentAngle), 0.0f) * radius;
         Vector3 bulletPosition = transform.position;// + offset;
-        //Debug.Log(bulletPosition);
         GameObject bullet = (GameObject)Instantiate (bulletPrefab, bulletPosition, Quaternion.Euler(new Vector3(0,0,0)));
     }
 
