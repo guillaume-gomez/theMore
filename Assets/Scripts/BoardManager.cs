@@ -29,6 +29,7 @@ public class BoardManager : MonoBehaviour
     public GameObject[] foodTiles;
     public GameObject[] enemyTiles;
     public GameObject[] outerWallTiles;
+    public GameObject player;
 
     private Transform boardHolder;
     private List <Vector3> gridPositions = new List <Vector3> ();
@@ -85,26 +86,48 @@ public class BoardManager : MonoBehaviour
         for(int i = 0; i < ObjectCount; ++i)
         {
             Vector3 randomPosition = RandomPosition();
-            GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
-            Instantiate(tileChoice, randomPosition, Quaternion.identity);
+            if(randomPosition != exitZonePosition) {
+                GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
+                Instantiate(tileChoice, randomPosition, Quaternion.identity);
+            }
         }
     }
 
-    void InstanciateAtRandom(GameObject obj) {
-        beginZonePosition = RandomPosition();
-        Debug.Log(beginZonePosition);
-        Instantiate(obj, beginZonePosition, Quaternion.identity);
+    void InstantiateBeginAndExitZone(int level) {
+        int distance = level * 5 ;
+//        Debug.Log(distance);
+
+        int xBegin = 1;
+        int yBegin = 1;
+        beginZonePosition = new Vector3(xBegin, yBegin, 0f);
+        Instantiate(beginZone, beginZonePosition, Quaternion.identity);
+
+        int xExit = Random.Range(1, distance);
+        int yExit = distance + xExit;
+        xExit = xBegin + xExit;
+        yExit = yBegin + yExit;
+        if(xExit > columns - 1) {
+            //update yExit to repercute the truncation
+            yExit = yExit + ((columns -1) - xExit);
+            xExit = columns - 1;
+        }
+
+        if(yExit > rows - 1) {
+            yExit = rows - 1;
+        }
+        exitZonePosition = new Vector3(xExit, yExit, 0f);
+        Instantiate(exit, exitZonePosition, Quaternion.identity);
     }
 
     public void SetupScene(int level)
     {
         InitialiseList();
         BoardSetup();
-        int enemyCount = (int)Mathf.Log(level, 2f) * 3;
+        InstantiateBeginAndExitZone(level);
+        int enemyCount = 1;//(int) Mathf.Log(level, 2.0f) * 4;
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
-        Instantiate(exit, new Vector3(columns -1, rows - 1, 0f), Quaternion.identity);
-        InstanciateAtRandom(beginZone);
+        Instantiate(player, beginZonePosition, Quaternion.identity);
     }
 
     public Vector3 getBeginZonePosition() {
