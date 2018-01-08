@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour {
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
 
-    public float detectionDistance = 3.0f;
+    public float detectionDistance = 15.0f;
 
     private Vector3 target;
     private float tarX = 0.0f;
@@ -25,33 +25,40 @@ public class Enemy : MonoBehaviour {
     }
 
     void CreateTarPoint() {
-        float offset = 5;
-        float minTarX = -offset;
-        float maxTarX = offset;
-        float minTarY = -offset;
-        float maxTarY = offset;
+        do {
+            float offset = 5;
+            float minTarX = -offset;
+            float maxTarX = offset;
+            float minTarY = -offset;
+            float maxTarY = offset;
 
-        int dampX = Random.Range(1, 3);
-        int dampY = Random.Range(1, 3);
+            int dampX = Random.Range(1, 3);
+            int dampY = Random.Range(1, 3);
 
-        tarX = Random.Range(minTarX, maxTarX) - dampX;
-        tarY = Random.Range(minTarY, maxTarY) - dampY;
-        target = new Vector3(tarX + transform.position.x, tarY + transform.position.y, 0.0f);
+            tarX = Random.Range(minTarX, maxTarX) - dampX;
+            tarY = Random.Range(minTarY, maxTarY) - dampY;
+            target = new Vector3(tarX + transform.position.x, tarY + transform.position.y, 0.0f);
+        } while(
+            Physics2D.Linecast(transform.position, target, blockingLayer).collider != null &&
+            target.x >= 0.0f && target.x < GameManager.instance.boardScript.columns &&
+            target.y >= 0.0f && target.y < GameManager.instance.boardScript.rows
+        );
+        //Debug.Log(target);
     }
 
     void Update() {
-        if(Vector3.Distance(transform.position, target) <= 0.05) {
+        if(Vector3.Distance(transform.position, target) <= 0.005f) {
             CreateTarPoint();
             return;
         }
         RaycastHit2D hit;
         hit = Physics2D.Linecast(transform.position, target, blockingLayer);
-        if(hit.transform == null) {
+        if(hit.collider == null) {
             float step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, target, step);
         } else {
-            target = new Vector3(-tarX + transform.position.x, -tarY + transform.position.y, 0.0f);
-            //Debug.Log(target);
+            CreateTarPoint();
+            return;
         }
 
         if (Vector3.Distance(transform.position, targetToShoot.transform.position) <= detectionDistance) {
