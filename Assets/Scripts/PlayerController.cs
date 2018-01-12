@@ -8,9 +8,7 @@ public class PlayerController : MonoBehaviour {
     public float speed;
     public LayerMask blockingLayer;
 
-    public GameObject bulletPrefab;
-    public Transform bulletSpawn;
-
+    private Weapon weapon;
     private Rigidbody2D rb2D;
     private BoxCollider2D boxCollider;
     private float restardLevelDelay = 1f;
@@ -19,6 +17,7 @@ public class PlayerController : MonoBehaviour {
     void Start () {
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
+        weapon = GetComponentInChildren<Weapon>();
     }
 
     void FixedUpdate () {
@@ -26,7 +25,7 @@ public class PlayerController : MonoBehaviour {
         float moveVertical = Input.GetAxis("Vertical");
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
-            Fire();
+            weapon.Fire();
         }
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
         Move(movement);
@@ -68,10 +67,5 @@ public class PlayerController : MonoBehaviour {
         float step = ( speed / 2 ) * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, end, step);
         yield return null;
-    }
-
-    void Fire()
-    {
-        Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
     }
 }
