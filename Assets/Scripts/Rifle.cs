@@ -8,4 +8,10 @@ public class Rifle : Weapon {
   void Start () {
     timer = 0.5f;
   }
+
+  void Shoot() {
+    // see base for the code commented
+    Instantiate(bulletPrefab, transform.position/*bulletSpawn.position*/, transform.rotation);
+    base.Shoot();
+  }
 }
