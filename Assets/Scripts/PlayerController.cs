@@ -31,6 +31,10 @@ public class PlayerController : MonoBehaviour {
         Move(movement);
     }
 
+    void Update() {
+        weapon.RotateWeapon();
+    }
+
     bool Move(Vector2 movement) {
         RaycastHit2D hit;
         Vector2 start = transform.position;
