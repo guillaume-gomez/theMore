@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour {
   public GameObject bulletPrefab;
-  public Transform bulletSpawn;
+  //temporary disable it
+  //public Transform bulletSpawn;
   public float timer = 1.0f;
 
   private bool onceShootFunctionCalled = false;
@@ -14,19 +15,21 @@ public class Weapon : MonoBehaviour {
   }
 
   void Update () {
+     Vector3 pos = Camera.main.WorldToScreenPoint(transform.position);
+     Vector3 dir = Input.mousePosition - pos;
+     float angle = - 90 + Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+     transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
   }
 
   public void Fire()
   {
-    Debug.Log("Fire");
     if(!onceShootFunctionCalled) {
         Invoke("Shoot", timer);
         onceShootFunctionCalled = true;
     }
   }
 
-  void Shoot() {
-    Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+  protected void Shoot() {
     onceShootFunctionCalled = false;
   }
 }
