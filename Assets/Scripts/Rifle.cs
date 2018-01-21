@@ -11,7 +11,9 @@ public class Rifle : Weapon {
 
   void Shoot() {
     // see base for the code commented
-    Instantiate(bulletPrefab, transform.position/*bulletSpawn.position*/, transform.rotation);
+    GameObject bullet = Instantiate(bulletPrefab, transform.position/*bulletSpawn.position*/, transform.rotation);
+    bullet.gameObject.tag = this.bulletTag;
+    bullet.layer = LayerMask.NameToLayer(this.bulletTag);
     base.Shoot();
   }
 }
