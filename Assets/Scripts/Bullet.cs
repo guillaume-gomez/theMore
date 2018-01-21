@@ -8,13 +8,15 @@ public class Bullet : MonoBehaviour
 
     void Start() {
         rb2D = GetComponent<Rigidbody2D>();
-        Vector2 target = Camera.main.ScreenToWorldPoint( new Vector2(Input.mousePosition.x, Input.mousePosition.y) );
-        Vector2 myPos = new Vector2(transform.position.x, transform.position.y);
-        Vector2 direction = target - myPos;
-        direction.Normalize();
-
-        rb2D.velocity = direction * speed;
+        rb2D.velocity = transform.up * speed;
+        rb2D.rotation = -90.0f;
         Destroy(gameObject, 2.0f);
     }
+
+    void OnCollisionEnter2D(Collision2D other) {
+        Destroy(gameObject);
+    }
+
+
 
 }
