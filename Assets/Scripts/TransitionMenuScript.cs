@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class TransitionMenuScript : MonoBehaviour
 {
-    private float restardLevelDelay = 4f;
+    private float restardLevelDelay = 2f;
 
     void Start() {
         Invoke("LoadingLevel", restardLevelDelay);
@@ -13,6 +13,6 @@ public class TransitionMenuScript : MonoBehaviour
 
     private void LoadingLevel()
     {
-        SceneManager.LoadScene("mainScene",  LoadSceneMode.Single);
+        SceneManager.LoadScene((int)ScreensEnum.GameScreen,  LoadSceneMode.Single);
     }
 }

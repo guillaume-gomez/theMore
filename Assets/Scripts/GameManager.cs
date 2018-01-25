@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public BoardManager boardScript;
 
     private int level = 1;
-    private bool doingSetup;
     private bool needUpdate;
     private float restardLevelDelay = 1f;
 
@@ -24,12 +23,16 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         boardScript = GetComponent<BoardManager>();
+        // to enable only when mainScene is launch as standalone
         InitGame();
     }
 
-    static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    static private void OnSceneLoaded(Scene scene, LoadSceneMode arg1)
     {
-        instance.InitGame();
+        //do not load in other scene
+        if(scene.buildIndex == (int)ScreensEnum.GameScreen) {
+            instance.InitGame();
+        }
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -40,15 +43,9 @@ public class GameManager : MonoBehaviour
 
     void InitGame()
     {
-        doingSetup = true;
+        Debug.Log("InitGame level: " + level);
         needUpdate = true;
-        //Invoke("HideLevelImage", levelStartDelay);
         boardScript.SetupScene(level);
-    }
-
-    private void HideLevelImage()
-    {
-        doingSetup = false;
     }
 
     public void GameOver()
@@ -68,17 +65,8 @@ public class GameManager : MonoBehaviour
 
     private void LoadingLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+        SceneManager.LoadScene((int)ScreensEnum.WinScreen, LoadSceneMode.Single);
     }
 
-    void Update()
-    {
-    }
-}
-
-
-public enum GameStates {
-    Intro,
-    Mainmenu,
-    LevelSelection
 }
