@@ -21,6 +21,10 @@ public class Enemy : MonoBehaviour {
     void Start() {
         CreateTarPoint();
         targetToShoot = GameObject.FindWithTag("Player");
+        weapon = GetComponentInChildren<Weapon>();
+        if(hasWeapon == false) {
+            weapon.Disable();
+        }
     }
 
     void CreateTarPoint() {
@@ -42,7 +46,6 @@ public class Enemy : MonoBehaviour {
             target.x >= 0.0f && target.x < GameManager.instance.boardScript.columns &&
             target.y >= 0.0f && target.y < GameManager.instance.boardScript.rows
         );
-        //Debug.Log(target);
     }
 
     void Update() {
@@ -60,11 +63,9 @@ public class Enemy : MonoBehaviour {
             return;
         }
 
-        if (Vector3.Distance(transform.position, targetToShoot.transform.position) <= detectionDistance) {
-            if(!onceShootFunctionCalled) {
-                Invoke("Fire", 0.3f);
-                onceShootFunctionCalled = true;
-            }
+        weapon.RotateTo(targetToShoot);
+        if (hasWeapon && Vector3.Distance(transform.position, targetToShoot.transform.position) <= detectionDistance) {
+            weapon.Fire("BulletEnemy");
         }
 
     }
