@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         // DO SOME STUFF
-        Invoke("LoadingLevel", restardLevelDelay);
+        Invoke("ReloadCurrentLevel", restardLevelDelay);
         enabled = false;
     }
 
@@ -65,8 +65,11 @@ public class GameManager : MonoBehaviour
 
     private void LoadingLevel()
     {
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
         SceneManager.LoadScene((int)ScreensEnum.WinScreen, LoadSceneMode.Single);
+    }
+
+    private void ReloadCurrentLevel() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
 }
