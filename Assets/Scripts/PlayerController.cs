@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour {
     private Weapon weapon;
     private Rigidbody2D rb2D;
     private BoxCollider2D boxCollider;
-    private float restardLevelDelay = 1f;
 
     // Use this for initialization
     void Start () {
@@ -32,7 +31,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
-        weapon.RotateWeapon();
+        weapon.RotateToMouse();
     }
 
     bool Move(Vector2 movement) {
