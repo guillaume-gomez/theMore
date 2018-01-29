@@ -8,16 +8,15 @@ public class Enemy : MonoBehaviour {
     public float speed = 0.8f;
     public LayerMask blockingLayer;
 
-    public GameObject bulletPrefab;
-    public Transform bulletSpawn;
-
     public float detectionDistance = 15.0f;
+    public bool hasWeapon = true;
 
     private Vector3 target;
     private float tarX = 0.0f;
     private float tarY = 0.0f;
     private GameObject targetToShoot;
     private bool onceShootFunctionCalled = false;
+    private Weapon weapon;
 
     void Start() {
         CreateTarPoint();
@@ -77,9 +76,5 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-    void Fire()
-    {
-        Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-        onceShootFunctionCalled = false;
-    }
+    public bool HasWeapon { get; set; }
 }
