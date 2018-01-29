@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour {
     private float tarX = 0.0f;
     private float tarY = 0.0f;
     private GameObject targetToShoot;
-    private bool onceShootFunctionCalled = false;
     private Weapon weapon;
 
     void Start() {
