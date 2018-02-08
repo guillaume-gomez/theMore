@@ -8,7 +8,7 @@ public class Gun : Weapon {
     timer = 0.0f;
   }
 
-  void Shoot() {
+  new void Shoot() {
     // see base for the code commented
     GameObject bullet = Instantiate(bulletPrefab, transform.position/*bulletSpawn.position*/, transform.rotation);
     bullet.gameObject.tag = this.bulletTag;
