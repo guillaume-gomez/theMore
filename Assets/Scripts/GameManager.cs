@@ -11,6 +11,18 @@ public class GameManager : MonoBehaviour
     private int level = 1;
     private bool needUpdate;
     private float restardLevelDelay = 1f;
+    private int nbWeaponsAvailable = 1;
+    private int nbLevelBeforeNextWeapon = 5;
+
+    public int NbWeaponsAvailable {
+        get
+        {
+            if(instance == null) {
+                instance = this;
+            }
+            return instance.nbWeaponsAvailable;
+        }
+    }
 
     void Awake()
     {
@@ -58,6 +70,9 @@ public class GameManager : MonoBehaviour
     public void NextLevel() {
         if(needUpdate) {
             level++;
+            if(level % nbLevelBeforeNextWeapon == 0) {
+                nbWeaponsAvailable++;
+            }
             Invoke("LoadingLevel", restardLevelDelay);
             needUpdate = false;
         }
