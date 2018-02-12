@@ -5,9 +5,17 @@ using UnityEngine;
 
 public class WeaponAttachment : MonoBehaviour {
   public GameObject[] weapons;
+  public bool forPlayer = false;
 
   void Start () {
-    GameObject weapon = weapons[Random.Range(0, weapons.Length)];
+    GameObject weapon = null;
+    if(GameManager.instance.NbWeaponsAvailable > weapons.Length) {
+      weapon = weapons[0];//weapons[Random.Range(0, weapons.Length)];
+    } else if (!forPlayer) {
+      weapon = weapons[Random.Range(0, GameManager.instance.NbWeaponsAvailable)];
+    } else {
+      weapon = weapons[GameManager.instance.CurrentIndexWeaponHero];
+    }
     //Create an instance of the weapon and set the state to idle
     GameObject weaponSlot = Instantiate(weapon, new Vector3 (0, 0, 0), Quaternion.identity) as GameObject;
     //Attach the weapon to the desired bone or submesh make sure its a child to the player object
