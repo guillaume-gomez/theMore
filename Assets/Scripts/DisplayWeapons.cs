@@ -8,6 +8,7 @@ public class DisplayWeapons : MonoBehaviour {
 
   public GameObject weaponButtonPrefab;
   public GameObject lockedWeaponButtonPrefab;
+  public string[] weaponsTitle; // must be ordered like in weaponAttachment
   public int nbWeapons = 4;
 
 	// Use this for initialization
@@ -25,7 +26,7 @@ public class DisplayWeapons : MonoBehaviour {
       button.transform.position = transform.position;
       button.GetComponent<RectTransform>().SetParent(transform);
       button.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, (110 * (i + 1)) + (150 * i), 60);
-      button.GetComponentInChildren<Text>().text = "" + (i + 1);
+      button.GetComponentInChildren<Text>().text = weaponsTitle[i];
     }
   }
 
