@@ -8,22 +8,22 @@ public class Enemy : MonoBehaviour {
     public float speed = 0.8f;
     public LayerMask blockingLayer;
 
-    public float detectionDistance = 15.0f;
-    public bool hasWeapon = true;
+    public float detectionDistance = 50.0f;
+    public bool hasWeapon = false;
+    public float latency = 0.4f;
 
     private Vector3 target;
     private float tarX = 0.0f;
     private float tarY = 0.0f;
     private GameObject targetToShoot;
+    private bool hasShoot = false;
     private Weapon weapon;
 
     void Start() {
         CreateTarPoint();
         targetToShoot = GameObject.FindWithTag("Player");
         weapon = GetComponentInChildren<Weapon>();
-        if(hasWeapon == false) {
-            weapon.Disable();
-        }
+        weapon.Disable();
     }
 
     void CreateTarPoint() {
@@ -63,8 +63,10 @@ public class Enemy : MonoBehaviour {
         }
 
         weapon.RotateTo(targetToShoot);
-        if (hasWeapon && Vector3.Distance(transform.position, targetToShoot.transform.position) <= detectionDistance) {
-            weapon.Fire("BulletEnemy");
+        if (hasWeapon && !hasShoot && Vector3.Distance(transform.position, targetToShoot.transform.position) <= detectionDistance) {
+            hasShoot = true;
+            weapon.Enable();
+            Invoke("Shoot", latency);
         }
 
     }
@@ -73,7 +75,17 @@ public class Enemy : MonoBehaviour {
         if(other.gameObject.tag == "Bullet") {
             Destroy(other.gameObject);
             Destroy(gameObject);
+            // restart the game if the player kill an innocent npc
+            if(!hasWeapon) {
+                GameManager.instance.GameOver(GameManager.instance.GameOverKillInnocent);
+            }
         }
+    }
+
+    void Shoot() {
+        weapon.Fire("BulletEnemy");
+        weapon.Disable();
+        hasShoot = false;
     }
 
     public bool HasWeapon { get; set; }
