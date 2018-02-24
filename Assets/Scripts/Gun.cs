@@ -5,7 +5,7 @@ using UnityEngine;
 public class Gun : Weapon {
   // Use this for initialization
   void Start () {
-    timer = 0.0f;
+    timer = 0.1f;
   }
 
   new void Shoot() {

@@ -7,7 +7,7 @@ public class Shotgun : Weapon {
   public float rotation = 30; // in degrees
 
   void Start () {
-    timer = 0.0f;
+    timer = 0.5f;
   }
 
   new void Shoot() {
