@@ -117,8 +117,6 @@ public class GameManager : MonoBehaviour
             }
             GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");
             for(int i = 0; i < enemys.Length; ++i) {
-                Debug.Log("forbidden");
-                //Destroy(enemys[i]);
                 enemys[i].GetComponent<Enemy>().HasWeapon = false;
             }
             level++;
