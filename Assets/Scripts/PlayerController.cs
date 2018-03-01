@@ -11,12 +11,14 @@ public class PlayerController : MonoBehaviour {
     private Weapon weapon;
     private Rigidbody2D rb2D;
     private BoxCollider2D boxCollider;
+    private bool isInvisible;
 
     // Use this for initialization
     void Start () {
         boxCollider = GetComponent<BoxCollider2D>();
         rb2D = GetComponent<Rigidbody2D>();
         weapon = GetComponentInChildren<Weapon>();
+        isInvisible = false;
     }
 
     void FixedUpdate () {
@@ -53,6 +55,7 @@ public class PlayerController : MonoBehaviour {
         if(other.tag == "Finish")
         {
             GameManager.instance.NextLevel();
+            isInvisible = true;
             StartCoroutine(EndingAnimation(other.transform.position));
         }
     }
@@ -61,8 +64,10 @@ public class PlayerController : MonoBehaviour {
         if(other.gameObject.tag == "BulletEnemy") {
             Destroy(other.gameObject);
             //Camera.main.CameraShake(2.0f, 1.0f);
-            GameManager.instance.GameOver();
-            gameObject.SetActive(false);
+            if(!isInvisible) {
+                GameManager.instance.GameOver(GameManager.instance.GameOverDie);
+                gameObject.SetActive(false);
+            }
         }
     }
 
