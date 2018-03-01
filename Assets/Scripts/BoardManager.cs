@@ -18,8 +18,8 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public int columns = 20;
-    public int rows = 20;
+    public int columns = 50;
+    public int rows = 50;
     public Count wallCount = new Count(5, 9);
     public Count foodCount = new Count(1, 5);
     public GameObject exit;
@@ -37,7 +37,7 @@ public class BoardManager : MonoBehaviour
     private Vector3 exitZonePosition = new Vector3();
 
     void Start() {
-        SetupScene(1);
+        SetupScene(1, this.columns, this.rows);
     }
 
     void InitialiseList()
@@ -80,18 +80,20 @@ public class BoardManager : MonoBehaviour
         return randomPosition;
     }
 
-    void LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum)
+    List<GameObject> LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum)
     {
         int ObjectCount = Random.Range(minimum, maximum + 1);
-
+        List <GameObject> arrayObject = new List<GameObject>();
         for(int i = 0; i < ObjectCount; ++i)
         {
             Vector3 randomPosition = RandomPosition();
             if(randomPosition != exitZonePosition) {
                 GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
-                Instantiate(tileChoice, randomPosition, Quaternion.identity);
+                GameObject item = Instantiate(tileChoice, randomPosition, Quaternion.identity);
+                arrayObject.Add(item);
             }
         }
+        return arrayObject;
     }
 
     void InstantiateBeginAndExitZone(int level) {
@@ -120,13 +122,25 @@ public class BoardManager : MonoBehaviour
         Instantiate(exit, exitZonePosition, Quaternion.identity);
     }
 
-    public void SetupScene(int level)
+    private void InitEnemys(int enemyCount, int level) {
+        List<GameObject> enemys = LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
+        int nbEnemyWithGun = level + 1 + Random.Range(0, 15);
+        for(int i = 0; i < nbEnemyWithGun; ++i) {
+            Enemy enemy = enemys[i].GetComponent<Enemy>();
+            enemy.hasWeapon = true;
+        }
+    }
+
+    public void SetupScene(int level, int columns, int rows)
     {
+        this.columns = columns;
+        this.rows = rows;
+
         InitialiseList();
         BoardSetup();
         InstantiateBeginAndExitZone(level);
-        int enemyCount = 1;//(int) Mathf.Log(level, 2.0f) * 4;
-        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
+        int enemyCount = (5 * (level + 1)) + Random.Range(0, 15);
+        InitEnemys(enemyCount, level);
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
         Instantiate(player, beginZonePosition, Quaternion.identity);
     }
